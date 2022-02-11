@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 
-from customer.serializers import CustomerSerializer, CustomerVehiclesSerializer
+from customer.serializers import CustomerSerializer
 from .models import ParkMovement
 from .serializers import OperationalSerializer
 from rest_framework.parsers import JSONParser
@@ -26,13 +26,14 @@ def register(request, *args, **kwargs):
 
     elif request.method == "POST":
         park_data = JSONParser().parse(request)
-        park_serializer = OperationalSerializer(data = park_data)
-        vehicle_serializer = CustomerVehiclesSerializer(data = park_data)
-        if vehicle_serializer.is_valid() and park_serializer.is_valid():
+
+        park_serializer = OperationalSerializer(data=park_data)
+
+        if park_serializer.is_valid():
             park_serializer.save()
-            vehicle_serializer.save()
-            return JsonResponse([park_serializer.data , vehicle_serializer.data], status=status.HTTP_200_OK, safe=False)
-        
+            return JsonResponse(park_serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(park_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     try:
         park_movement = ParkMovement.objects.get(pk=kwargs.get('pk'))
     except:

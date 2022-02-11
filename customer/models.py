@@ -8,6 +8,6 @@ class Customer(models.Model):
 
 
 class CustomerVehicles(models.Model):
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     plate = models.CharField(max_length=10)
-    kind = models.IntegerField()
+    kind = models.IntegerField(choices = [(1, 'MOTO'), [2, 'CARRO']], null=True)

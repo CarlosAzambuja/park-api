@@ -5,17 +5,22 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 # CORS
-# from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
     return HttpResponse('Customer index.')
 
 
-# @csrf_exempt
+@csrf_exempt
 def register(request, *args, **kwargs):
+    customer_id = None
     if request.method == 'GET':
-        customers = Customer.objects.all()
+        if 'id' in request.GET:
+            customer_id = request.GET['id']
+
+        customers = Customer.objects.all(
+        ) if not customer_id else Customer.objects.filter(id=customer_id)
 
         customerSerializer = CustomerSerializer(customers, many=True)
 
@@ -43,7 +48,7 @@ def register(request, *args, **kwargs):
         return JsonResponse(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @csrf_exempt
+@csrf_exempt
 def registerVehicle(request, *args, **kwargs):
     if request.method == 'GET':
         customers_vehicles = CustomerVehicles.objects.all()
