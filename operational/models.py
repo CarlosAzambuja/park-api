@@ -11,4 +11,4 @@ class ParkMovement(models.Model):
     validate_date = models.DateTimeField(null=True)
     value = models.FloatField(null=True)
     vehicle_id = models.ForeignKey(
-        CustomerVehicles, on_delete=models.DO_NOTHING, related_name="vehicle_id", null=True)
+        CustomerVehicles, on_delete=models.DO_NOTHING, related_name="vehicle", null=True)
