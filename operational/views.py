@@ -83,7 +83,6 @@ def update(request, *args, **kwargs):
     body_unicode = request.body.decode('utf-8')
     data = json.loads(body_unicode)
 
-    print(data)
     ParkMovement.objects.filter(id=kwargs['pk']).update(exit_date=data)
 
     return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
